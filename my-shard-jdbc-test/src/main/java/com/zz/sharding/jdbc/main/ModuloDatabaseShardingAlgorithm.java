@@ -2,10 +2,8 @@ package com.zz.sharding.jdbc.main;
 
 import com.dangdang.ddframe.rdb.sharding.api.ShardingValue;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.database.SingleKeyDatabaseShardingAlgorithm;
-import com.google.common.collect.Range;
 
 import java.util.Collection;
-import java.util.LinkedHashSet;
 
 /**
  * Created by zhangzuizui on 2018/1/9.

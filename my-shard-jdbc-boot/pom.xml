@@ -9,15 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.zz.sharding</groupId>
-    <artifactId>my-shard-jdbc-test</artifactId>
-    <dependencies>
-        <dependency>
-            <groupId>com.zz.sharding.common</groupId>
-            <artifactId>my-shard-jdbc-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
+    <groupId>com.zz.sharding.boot</groupId>
+    <artifactId>my-shard-jdbc-boot</artifactId>
 
 
 </project>
