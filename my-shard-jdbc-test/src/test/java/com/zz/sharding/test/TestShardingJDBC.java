@@ -25,6 +25,7 @@ public class TestShardingJDBC {
     @Test
     public void test(){
         List<Order> orderList = BuildOrderUtils.getOrderList();
+//        orderMapper.insert(orderList.get(0));
         for (Order order : orderList){
             orderMapper.insert(order);
         }

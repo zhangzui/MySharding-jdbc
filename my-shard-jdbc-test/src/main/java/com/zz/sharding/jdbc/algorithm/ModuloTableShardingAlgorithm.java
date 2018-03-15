@@ -18,7 +18,8 @@ public class ModuloTableShardingAlgorithm implements SingleKeyTableShardingAlgor
      */
     public String doEqualSharding(final Collection<String> tableNames, final ShardingValue<String> shardingValue) {
         for (String each : tableNames) {
-            if (each.endsWith(shardingValue.getValue().hashCode() % 2 + "")) {
+            String endWith = shardingValue.getValue().hashCode() % 2 + 1 +"";
+            if (each.endsWith(endWith)) {
                 return each;
             }
         }

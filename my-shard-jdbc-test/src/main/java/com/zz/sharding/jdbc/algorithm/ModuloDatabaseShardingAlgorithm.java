@@ -12,7 +12,8 @@ public class ModuloDatabaseShardingAlgorithm implements SingleKeyDatabaseShardin
 
     public String doEqualSharding(Collection<String> availableTargetNames, ShardingValue<String> shardingValue) {
         for (String each : availableTargetNames) {
-            if (each.endsWith(shardingValue.getValue().hashCode() % 2 + "")) {
+            String endwith = (shardingValue.getValue().hashCode() % 2) + 1 +"";
+            if (each.endsWith(endwith)) {
                 return each;
             }
         }
