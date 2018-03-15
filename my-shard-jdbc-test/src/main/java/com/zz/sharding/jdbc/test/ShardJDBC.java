@@ -1,4 +1,4 @@
-package com.zz.sharding.jdbc.main;
+package com.zz.sharding.jdbc.test;
 
 import com.dangdang.ddframe.rdb.sharding.api.rule.BindingTableRule;
 import com.dangdang.ddframe.rdb.sharding.api.rule.DataSourceRule;
@@ -7,6 +7,8 @@ import com.dangdang.ddframe.rdb.sharding.api.rule.TableRule;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.database.DatabaseShardingStrategy;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.table.TableShardingStrategy;
 import com.dangdang.ddframe.rdb.sharding.jdbc.ShardingDataSource;
+import com.zz.sharding.jdbc.algorithm.ModuloDatabaseShardingAlgorithm;
+import com.zz.sharding.jdbc.algorithm.ModuloTableShardingAlgorithm;
 import org.apache.commons.dbcp.BasicDataSource;
 
 import javax.sql.DataSource;

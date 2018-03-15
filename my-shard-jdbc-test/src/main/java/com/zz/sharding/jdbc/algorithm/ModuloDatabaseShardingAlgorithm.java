@@ -1,4 +1,4 @@
-package com.zz.sharding.jdbc.main;
+package com.zz.sharding.jdbc.algorithm;
 
 import com.dangdang.ddframe.rdb.sharding.api.ShardingValue;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.database.SingleKeyDatabaseShardingAlgorithm;
@@ -9,7 +9,6 @@ import java.util.Collection;
  * Created by zhangzuizui on 2018/1/9.
  */
 public class ModuloDatabaseShardingAlgorithm implements SingleKeyDatabaseShardingAlgorithm<String> {
-
 
     public String doEqualSharding(Collection<String> availableTargetNames, ShardingValue<String> shardingValue) {
         for (String each : availableTargetNames) {
@@ -27,4 +26,5 @@ public class ModuloDatabaseShardingAlgorithm implements SingleKeyDatabaseShardin
     public Collection<String> doBetweenSharding(Collection<String> collection, ShardingValue<String> shardingValue) {
         return null;
     }
+
 }

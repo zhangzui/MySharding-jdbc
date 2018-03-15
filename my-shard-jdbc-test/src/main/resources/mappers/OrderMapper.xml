@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="OrderMapper" >
+<mapper namespace="com.zz.sharding.jdbc.dao.OrderMapper" >
   <resultMap id="BaseResultMap" type="com.zz.sharding.jdbc.bean.Order" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="order_id" property="orderId" jdbcType="VARCHAR" />
@@ -20,8 +20,8 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.zz.sharding.jdbc.bean.Order" useGeneratedKeys="true" keyProperty="id" >
-    insert into my_order (order_id, info)
-    values (#{orderId,jdbcType=VARCHAR}, #{info,jdbcType=VARCHAR})
+    insert into my_order (id, order_id, info)
+    values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR}, #{info,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zz.sharding.jdbc.bean.Order" useGeneratedKeys="true" keyProperty="id" >
     insert into my_order

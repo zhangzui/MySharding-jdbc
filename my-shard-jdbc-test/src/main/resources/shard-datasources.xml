@@ -34,7 +34,7 @@
         <property name="testOnReturn" value="false" />
     </bean>
 
-    <rdb:strategy id="mutilKeysStrategy" sharding-columns="order_id" algorithm-class="com.zz.sharding.jdbc.main.ModuloTableShardingAlgorithm"/>
+    <rdb:strategy id="mutilKeysStrategy" sharding-columns="order_id" algorithm-class="com.zz.sharding.jdbc.algorithm.ModuloTableShardingAlgorithm"/>
 
     <rdb:data-source id="shardingDataSource">
         <rdb:sharding-rule data-sources="dataSource" default-data-source="dataSource">

@@ -1,4 +1,4 @@
-package com.zz.sharding.jdbc.main;
+package com.zz.sharding.jdbc.algorithm;
 
 import com.dangdang.ddframe.rdb.sharding.api.ShardingValue;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.table.SingleKeyTableShardingAlgorithm;

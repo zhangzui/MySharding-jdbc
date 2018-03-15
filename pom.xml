@@ -20,7 +20,6 @@
 
     <modules>
         <module>my-shard-jdbc-test</module>
-        <module>my-shard-jdbc-boot</module>
         <module>my-shard-jdbc-common</module>
     </modules>
     <dependencies>
