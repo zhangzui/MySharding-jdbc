@@ -1,4 +1,4 @@
-/*
+
 package com.zz.sharding.jdbc.test;
 
 import com.dangdang.ddframe.rdb.sharding.api.rule.BindingTableRule;
@@ -7,6 +7,7 @@ import com.dangdang.ddframe.rdb.sharding.api.rule.ShardingRule;
 import com.dangdang.ddframe.rdb.sharding.api.rule.TableRule;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.database.DatabaseShardingStrategy;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.table.TableShardingStrategy;
+import com.dangdang.ddframe.rdb.sharding.jdbc.ShardingDataSource;
 import com.zz.sharding.jdbc.algorithm.ModuloDatabaseShardingAlgorithm;
 import com.zz.sharding.jdbc.algorithm.ModuloTableShardingAlgorithm;
 import org.apache.commons.dbcp.BasicDataSource;
@@ -20,10 +21,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-*/
+
 /**
  * Created by zhangzuizui on 2018/1/9.
- *//*
+ */
 
 public class ShardJDBC {
 
@@ -36,8 +37,8 @@ public class ShardJDBC {
 
         DataSourceRule dataSourceRule = new DataSourceRule(dataSourceMap);
         TableRule orderTableRule = buildTableRule(dataSourceRule);
-        */
-/**
+
+        /**
          * DatabaseShardingStrategy 分库策略
          * 参数一：根据哪个字段分库
          * 参数二：分库路由函数
@@ -45,7 +46,7 @@ public class ShardJDBC {
          * 参数一：根据哪个字段分表
          * 参数二：分表路由函数
          *
-         *//*
+         */
 
         ShardingRule shardingRule = new ShardingRule(dataSourceRule, Arrays.asList(orderTableRule),
                 Arrays.asList(new BindingTableRule(Arrays.asList(orderTableRule))),
@@ -85,12 +86,12 @@ public class ShardJDBC {
         return orderTableRule;
     }
 
-    */
+
 /**
      * 创建数据源
      * @param dataSourceName
      * @return
-     *//*
+     */
 
     private static DataSource createDataSource(String dataSourceName) {
         BasicDataSource result = new BasicDataSource();
@@ -102,4 +103,4 @@ public class ShardJDBC {
     }
 
 }
-*/
+

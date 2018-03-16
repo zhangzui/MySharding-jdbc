@@ -21,6 +21,7 @@
     <modules>
         <module>my-shard-jdbc-test</module>
         <module>my-shard-jdbc-common</module>
+        <module>my-db-route</module>
     </modules>
     <dependencies>
         <dependency>
