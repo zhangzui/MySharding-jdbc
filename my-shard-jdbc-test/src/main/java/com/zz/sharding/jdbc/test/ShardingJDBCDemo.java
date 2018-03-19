@@ -48,14 +48,14 @@ public class ShardingJDBCDemo {
          * sql预处理
          */
         PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1, "001");
+        pstmt.setString(1, "000001");
 
         //4.SQL执行和结果归并
         ResultSet rs = pstmt.executeQuery();
 
         //5.获取结果
         while(rs.next()) {
-            System.out.println("字段1："+rs.getInt(1)+"，字段2"+rs.getString(2));
+            System.out.println("id="+rs.getInt(1)+",order_id="+rs.getString(2));
         }
     }
     private static ShardingRule buildShardingRule(){
@@ -86,8 +86,8 @@ public class ShardingJDBCDemo {
     private static DataSourceRule getDataSourceRule() {
         //数据源配置信息
         Map<String, DataSource> dataSourceMap = new HashMap<String, DataSource>(2);
-        dataSourceMap.put("my-shard-01", createDataSource("my-shard-01"));
-        dataSourceMap.put("my-shard-02", createDataSource("my-shard-02"));
+        dataSourceMap.put("my_shard_01", createDataSource("my_shard_01"));
+        dataSourceMap.put("my_shard_02", createDataSource("my_shard_01"));
 
         //库规则
         return new DataSourceRule(dataSourceMap);

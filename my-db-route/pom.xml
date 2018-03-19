@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>my-db-route</groupId>
-    <artifactId>com.zz.dbRoute</artifactId>
+    <groupId>com.zz.dbRoute</groupId>
+    <artifactId>my-db-route</artifactId>
 
 
 </project>
