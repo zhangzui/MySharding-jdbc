@@ -27,10 +27,8 @@ public class DbShardingConfig {
 
     private DbShardingConfig() {
         // 默认分库分表
-        tablesForTableSharding.add("f_usermessages");
-        tablesForTableSharding.add("zz_user");
+        tablesForTableSharding.add("my_order");
         // 默认分库 不分表
-        tablesForDbSharding.add("cf_task_0000");
         syncDbSharding();
 
     }

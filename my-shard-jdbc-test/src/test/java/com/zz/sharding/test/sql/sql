@@ -13,6 +13,8 @@
  PRIMARY KEY (`id`),
  INDEX index_name (order_id(20))
  );
+ ALTER TABLE my_order_001 ADD info varchar(50);
+ ALTER TABLE my_order_002 ADD info varchar(50);
 3.插入模拟数据
  insert into my_order_001 (order_id,id_card_no,name,password,sex,birthday)
  values('000001','001','zhangsan','123','t','1993-05-27');

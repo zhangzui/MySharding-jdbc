@@ -17,7 +17,7 @@ import java.util.List;
  * @date 2018/3/15 15:09
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"classpath:/shard-datasources-spring.xml"})
+@ContextConfiguration({"classpath:/shard-datasources-mybatis.xml"})
 public class TestShardingJDBCMybatis {
 
     @Autowired
@@ -32,7 +32,7 @@ public class TestShardingJDBCMybatis {
     }
     @Test
     public void testSelect(){
-       List<Order> orderList = orderMapper.selectByPrimaryKey(35L);
+       List<Order> orderList = orderMapper.selectByPrimaryKey(1L);
         System.out.println(JSON.toJSONString(orderList));
     }
 }
