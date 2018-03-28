@@ -3,7 +3,7 @@
 ​	 ShardingJDBC001简单的例子，配置信息的初始化，等
 
 ## 使用示例
-ShardingJDBC001
+ShardingJDBC
 ```
 package com.zz.sharding.jdbc.test;
 
