@@ -3,6 +3,8 @@ package com.zz.sharding.jdbc.dao;
 
 import com.zz.sharding.jdbc.bean.Order;
 
+import java.util.List;
+
 public interface OrderMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -10,7 +12,7 @@ public interface OrderMapper {
 
     int insertSelective(Order record);
 
-    Order selectByPrimaryKey(Long id);
+    List<Order> selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(Order record);
 

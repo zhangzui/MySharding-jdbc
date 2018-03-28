@@ -1,5 +1,5 @@
 
-package com.zz.sharding.jdbc.test;
+package com.zz.sharding.test.shardJDBC;
 
 import io.shardingjdbc.core.api.ShardingDataSourceFactory;
 import io.shardingjdbc.core.api.config.ShardingRuleConfiguration;
@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author zhangzuizui
  * @date 2018/1/9
  */
-public class ShardingJDBC001 {
+public class ShardingJDBC {
 
     public static void main(String[] args) throws SQLException {
         Map<String, DataSource> dataSourceMap = new HashMap<>();

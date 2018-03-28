@@ -1,4 +1,4 @@
-package com.zz.sharding.test;
+package com.zz.sharding.test.common;
 
 import com.zz.sharding.jdbc.bean.Order;
 
