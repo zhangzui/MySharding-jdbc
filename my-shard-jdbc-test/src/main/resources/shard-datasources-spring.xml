@@ -34,6 +34,9 @@
                 <sharding:table-rule logic-table="my_order" actual-data-nodes="my_shard_0${1..2}.my_order_00${1..2}" database-strategy-ref="databaseStrategy" table-strategy-ref="orderTableStrategy" />
             </sharding:table-rules>
         </sharding:sharding-rule>
+        <sharding:props>
+            <prop key="sql.show">true</prop>
+        </sharding:props>
     </sharding:data-source>
 
     <!--mybatis配置-->

@@ -50,9 +50,10 @@ public class ShardingJDBC {
         shardingRuleConfig.getTableRuleConfigs().add(orderTableRuleConfig);
 
         // 省略配置order_item表规则...
-
+        Properties properties = new Properties();
+        properties.setProperty("sql.show","true");
         // 获取数据源对象
-        DataSource dataSource = ShardingDataSourceFactory.createDataSource(dataSourceMap, shardingRuleConfig, new ConcurrentHashMap(), new Properties());
+        DataSource dataSource = ShardingDataSourceFactory.createDataSource(dataSourceMap, shardingRuleConfig, new ConcurrentHashMap(), properties);
 
         String sql = "SELECT * FROM my_order WHERE order_id = ?";
         //2.获取连接

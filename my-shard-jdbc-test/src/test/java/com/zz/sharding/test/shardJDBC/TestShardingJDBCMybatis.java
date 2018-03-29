@@ -32,7 +32,7 @@ public class TestShardingJDBCMybatis {
     }
     @Test
     public void testSelect(){
-       List<Order> orderList = orderMapper.selectByPrimaryKey(1L);
+       List<Order> orderList = orderMapper.selectByPrimaryKey(35L);
         System.out.println(JSON.toJSONString(orderList));
     }
 }
