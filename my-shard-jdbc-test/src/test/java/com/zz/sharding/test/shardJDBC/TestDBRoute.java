@@ -19,6 +19,12 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:/shard-datasources-mybatis-route.xml"})
 public class TestDBRoute {
+    public static void main(String[] args) {
+        TestDBRoute a = new TestDBRoute();
+        System.out.println(Thread.currentThread().getContextClassLoader());
+        System.out.println(a.getClass().getClassLoader());
+        System.out.println(System.getProperty("user.dir"));
+    }
     @Autowired
     private OrderMapper orderMapper;
 

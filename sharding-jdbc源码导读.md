@@ -45,11 +45,10 @@ public class ShardingJDBC001 {
         orderTableRuleConfig.setLogicTable("my_order");
         orderTableRuleConfig.setActualDataNodes("my_shard_0${1..2}.my_order_00${1..2}");
 
-        // 配置分库策略
-        orderTableRuleConfig.setDatabaseShardingStrategyConfig(new InlineShardingStrategyConfiguration("order_id", "my_shard_0${1}"));
-
-        // 配置分表策略
-        orderTableRuleConfig.setTableShardingStrategyConfig(new InlineShardingStrategyConfiguration("order_id", "my_order_00${1}"));
+       // 配置分库策略
+       orderTableRuleConfig.setDatabaseShardingStrategyConfig(new InlineShardingStrategyConfiguration("order_id", "my_shard_0${order_id.hashCode()%2+1}"));
+       // 配置分表策略
+       orderTableRuleConfig.setTableShardingStrategyConfig(new InlineShardingStrategyConfiguration("order_id", "my_order_00${order_id.hashCode()%2+1}"));
 
         // 配置分片规则
         ShardingRuleConfiguration shardingRuleConfig = new ShardingRuleConfiguration();
@@ -77,7 +76,6 @@ public class ShardingJDBC001 {
             System.out.println("id="+rs.getInt(1)+",order_id="+rs.getString(2));
         }
     }
-
     /**
      * 创建数据源
      * @param dataSourceName
@@ -126,7 +124,6 @@ new ShardingConnection(shardingContext);
 三、sql预处理
 ```
 PreparedStatement pstmt = conn.prepareStatement(sql);
-
 1.初始化sql预处理器：ShardingPreparedStatement
 public ShardingPreparedStatement(final ShardingConnection connection, final String sql, final int resultSetType, final int resultSetConcurrency, final int resultSetHoldability) {
         this.connection = connection;
@@ -163,7 +160,6 @@ public ResultSet executeQuery() throws SQLException {
     }
 1.构建路由preparedStatementUnits
    routeResult = routingEngine.route(getParameters());
-
     @Override
     public SQLRouteResult route(final String logicSQL, final List<Object> parameters, final SQLStatement sqlStatement) {
         SQLRouteResult result = new SQLRouteResult(sqlStatement);
@@ -208,7 +204,6 @@ public SQLStatement parse() {
 
         return SQLParserFactory.newInstance(dbType, lexerEngine.getCurrentToken().getType(), shardingRule, lexerEngine).parse();
     }
-
 创建数据库：SQLParserFactory.newInstance
 根据数据库类型创建 ：例如：MySQLSelectParser
 然后调用
