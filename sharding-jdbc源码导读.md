@@ -6,13 +6,11 @@
 ShardingJDBC
 ```
 package com.zz.sharding.jdbc.test;
-
 import io.shardingjdbc.core.api.ShardingDataSourceFactory;
 import io.shardingjdbc.core.api.config.ShardingRuleConfiguration;
 import io.shardingjdbc.core.api.config.TableRuleConfiguration;
 import io.shardingjdbc.core.api.config.strategy.InlineShardingStrategyConfiguration;
 import org.apache.commons.dbcp.BasicDataSource;
-
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,8 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
-
-
 /**
  * 当当分库分表组件实践
  *
@@ -91,58 +87,32 @@ public class ShardingJDBC001 {
     }
 }
 ```
-##一、构建ShardingDataSource数据源：初始化配置信息
-```
-DataSource dataSource = ShardingDataSourceFactory.createDataSource()
-```
-###详细
+#构建ShardingDataSource数据源：初始化配置信息
+##1.ShardingDataSourceFactory.createDataSource()
 ```
 1.public static DataSource createDataSource(final Map<String, DataSource> dataSourceMap, final ShardingRuleConfiguration shardingRuleConfig,
                                               final Map<String, Object> configMap, final Properties props) throws SQLException {
         return new ShardingDataSource(shardingRuleConfig.build(dataSourceMap), configMap, props);
     }
-其中shardingRuleConfig.build(dataSourceMap)构建分库和分表的规则配置
-
-2.public ShardingDataSource(final ShardingRule shardingRule, final Map<String, Object> configMap, final Properties props) throws SQLException {
-        super(shardingRule.getDataSourceMap().values());
-        if (!configMap.isEmpty()) {
-            ConfigMapContext.getInstance().getShardingConfig().putAll(configMap);
-        }
-        shardingProperties = new ShardingProperties(null == props ? new Properties() : props);
-        int executorSize = shardingProperties.getValue(ShardingPropertiesConstant.EXECUTOR_SIZE);
-        executorEngine = new ExecutorEngine(executorSize);
-        boolean showSQL = shardingProperties.getValue(ShardingPropertiesConstant.SQL_SHOW);
-        shardingContext = new ShardingContext(shardingRule, getDatabaseType(), executorEngine, showSQL);
-    }
+2.shardingRuleConfig.build(dataSourceMap)构建分库和分表的规则配置
 3.初始化ShardingContext
 ```
-二、获取数据库连接
+##2.获取数据库连接
 ```
-Connection conn = dataSource.getConnection();
-new ShardingConnection(shardingContext);
+1.Connection conn = dataSource.getConnection();
+2.new ShardingConnection(shardingContext);
 ```
-三、sql预处理
+##3.sql预处理
 ```
-PreparedStatement pstmt = conn.prepareStatement(sql);
-1.初始化sql预处理器：ShardingPreparedStatement
-public ShardingPreparedStatement(final ShardingConnection connection, final String sql, final int resultSetType, final int resultSetConcurrency, final int resultSetHoldability) {
-        this.connection = connection;
-        this.resultSetType = resultSetType;
-        this.resultSetConcurrency = resultSetConcurrency;
-        this.resultSetHoldability = resultSetHoldability;
-        routingEngine = new PreparedStatementRoutingEngine(sql, connection.getShardingContext());
-    }
-2.构建路由引擎：PreparedStatementRoutingEngine
-routingEngine = new PreparedStatementRoutingEngine(sql, connection.getShardingContext());
-public static SQLRouter createSQLRouter(final ShardingContext shardingContext) {
-        return HintManagerHolder.isDatabaseShardingOnly() ? new DatabaseHintSQLRouter(shardingContext) : new ParsingSQLRouter(shardingContext);
-    }
-3.根据isDatabaseShardingOnly判断构造那个sqlRouter
- 提示sqlRouter:DatabaseHintSQLRouter
- 解释sqlRouter:ParsingSQLRouter
-该步骤构造了sql执行所需的路由引擎和
+1.PreparedStatement pstmt = conn.prepareStatement(sql);
+2.构造PreparedStatementRoutingEngine
+3.根据isDatabaseShardingOnly判断构造那个sqlRouter；
+ a.提示sqlRouter:DatabaseHintSQLRouter
+ b.解释sqlRouter:ParsingSQLRouter
+该步骤构造了sql执行所需的路由引擎
 ```
-##一、路由库和表
+#一、路由库和表
+##开始执行pstmt.executeQuery()
 ```
 @Override
 public ResultSet executeQuery() throws SQLException {
@@ -158,6 +128,9 @@ public ResultSet executeQuery() throws SQLException {
         currentResultSet = result;
         return result;
     }
+```
+##1、解析和路由
+```
 1.构建路由preparedStatementUnits
    routeResult = routingEngine.route(getParameters());
     @Override
@@ -189,8 +162,19 @@ public ResultSet executeQuery() throws SQLException {
         }
         return result;
     }
-3.
-//sql声明
+```
+###a.准备阶段：sqlRouter.parse
+```
+sqlStatement处理获取路由结果
+        public SQLRouteResult route(final List<Object> parameters) {
+            if (null == sqlStatement) {
+                sqlStatement = sqlRouter.parse(logicSQL, parameters.size());
+            }
+            return sqlRouter.route(logicSQL, parameters, sqlStatement);
+        }
+```
+###a.准备阶段：sqlRouter.parse
+```
 sqlStatement = sqlRouter.parse(logicSQL, parameters.size());
 //构造SQL解析引擎
 SQLParsingEngine parsingEngine = new SQLParsingEngine(databaseType, logicSQL, shardingRule);
@@ -205,8 +189,7 @@ public SQLStatement parse() {
         return SQLParserFactory.newInstance(dbType, lexerEngine.getCurrentToken().getType(), shardingRule, lexerEngine).parse();
     }
 创建数据库：SQLParserFactory.newInstance
-根据数据库类型创建 ：例如：MySQLSelectParser
-然后调用
+根据数据库类型创建 ：例如：MySQLSelectParser，然后调用parse
     @Override
     public final SelectStatement parse() {
         SelectStatement result = parseInternal();
@@ -234,7 +217,7 @@ public SQLStatement parse() {
     }
 这里大部分调用lexerEngine中的方法进行sql词法解析：
 ```
-##路由之后执行准备sql预处理
+###b.准备sql预处理
 ```
 for (SQLExecutionUnit each : routeResult.getExecutionUnits()) {
    SQLType sqlType = routeResult.getSqlStatement().getType();
@@ -252,13 +235,44 @@ for (SQLExecutionUnit each : routeResult.getExecutionUnits()) {
    }
 }
 ```
-##二、创建sql处理器并执行sql
+##2.sql路由
+```
+ @Override
+    public SQLRouteResult route(final String logicSQL, final List<Object> parameters, final SQLStatement sqlStatement) {
+        SQLRouteResult result = new SQLRouteResult(sqlStatement);
+        if (sqlStatement instanceof InsertStatement && null != ((InsertStatement) sqlStatement).getGeneratedKey()) {
+            processGeneratedKey(parameters, (InsertStatement) sqlStatement, result);
+        }
+        RoutingResult routingResult = route(parameters, sqlStatement);
+        SQLRewriteEngine rewriteEngine = new SQLRewriteEngine(shardingRule, logicSQL, databaseType, sqlStatement);
+        boolean isSingleRouting = routingResult.isSingleRouting();
+        if (sqlStatement instanceof SelectStatement && null != ((SelectStatement) sqlStatement).getLimit()) {
+            processLimit(parameters, (SelectStatement) sqlStatement, isSingleRouting);
+        }
+        SQLBuilder sqlBuilder = rewriteEngine.rewrite(!isSingleRouting);
+        if (routingResult instanceof CartesianRoutingResult) {
+            for (CartesianDataSource cartesianDataSource : ((CartesianRoutingResult) routingResult).getRoutingDataSources()) {
+                for (CartesianTableReference cartesianTableReference : cartesianDataSource.getRoutingTableReferences()) {
+                    result.getExecutionUnits().add(new SQLExecutionUnit(cartesianDataSource.getDataSource(), rewriteEngine.generateSQL(cartesianTableReference, sqlBuilder)));
+                }
+            }
+        } else {
+            for (TableUnit each : routingResult.getTableUnits().getTableUnits()) {
+                result.getExecutionUnits().add(new SQLExecutionUnit(each.getDataSourceName(), rewriteEngine.generateSQL(each, sqlBuilder)));
+            }
+        }
+        if (showSQL) {
+            SQLLogger.logSQL(logicSQL, sqlStatement, result.getExecutionUnits(), parameters);
+        }
+        return result;
+    }
+```
+#二、执行sql
 ```
  List<ResultSet> resultSets = new PreparedStatementExecutor(
-                    getConnection().getShardingContext().getExecutorEngine(), routeResult.getSqlStatement().getType(), preparedStatementUnits, getParameters())
-                    .executeQuery();
+                    getConnection().getShardingContext().getExecutorEngine(), routeResult.getSqlStatement().getType(), preparedStatementUnits, getParameters()).executeQuery();
 ```
-##二、结果归并处理
+#三、结果归并处理
 ```
 result = new ShardingResultSet(resultSets, new MergeEngine(resultSets, (SelectStatement) routeResult.getSqlStatement()).merge(), this);
 回调，jdbc底层执行sql，并处理结果集
@@ -269,6 +283,3 @@ return executorEngine.executePreparedStatement(sqlType, preparedStatementUnits, 
             }
         });
 ```
-
-
-
