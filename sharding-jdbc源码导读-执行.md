@@ -62,7 +62,7 @@ private  <T> List<T> execute(
         return result;
     }
 ```
-##3.单个内部执行器：executeInternal
+##3.内部执行器：executeInternal
 //这里通过回调函数，sqlStatement执行调用JDBC的PreparedStatement，并将结果返回
 ```
  private <T> T executeInternal(final SQLType sqlType, final BaseStatementUnit baseStatementUnit, final List<List<Object>> parameterSets, final ExecuteCallback<T> executeCallback,
