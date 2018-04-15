@@ -30,31 +30,24 @@ public class ShardingJDBC {
         Map<String, DataSource> dataSourceMap = new HashMap<>();
         // 配置第一个数据源
         dataSourceMap.put("my_shard_01",createDataSource("my_shard_01"));
-
         // 配置第二个数据源
         dataSourceMap.put("my_shard_02", createDataSource("my_shard_02"));
-
         // 配置Order表规则
         TableRuleConfiguration orderTableRuleConfig = new TableRuleConfiguration();
         orderTableRuleConfig.setLogicTable("my_order");
         orderTableRuleConfig.setActualDataNodes("my_shard_0${1..2}.my_order_00${1..2}");
-
         // 配置分库策略
         orderTableRuleConfig.setDatabaseShardingStrategyConfig(new InlineShardingStrategyConfiguration("order_id", "my_shard_0${order_id.hashCode()%2+1}"));
-
         // 配置分表策略
         orderTableRuleConfig.setTableShardingStrategyConfig(new InlineShardingStrategyConfiguration("order_id", "my_order_00${order_id.hashCode()%2+1}"));
-
         // 配置分片规则
         ShardingRuleConfiguration shardingRuleConfig = new ShardingRuleConfiguration();
         shardingRuleConfig.getTableRuleConfigs().add(orderTableRuleConfig);
-
         // 省略配置order_item表规则...
         Properties properties = new Properties();
         properties.setProperty("sql.show","true");
         // 获取数据源对象
         DataSource dataSource = ShardingDataSourceFactory.createDataSource(dataSourceMap, shardingRuleConfig, new ConcurrentHashMap(), properties);
-
         String sql = "SELECT * FROM my_order WHERE order_id = ?";
         //2.获取连接
         Connection conn = dataSource.getConnection();
@@ -64,7 +57,7 @@ public class ShardingJDBC {
          * sql预处理
          */
         PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1, "001");
+        pstmt.setString(1, "000001");
         //4.SQL执行和结果归并
         ResultSet rs = pstmt.executeQuery();
         //5.获取结果
